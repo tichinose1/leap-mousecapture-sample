@@ -76,5 +76,14 @@ namespace LeapMouseCursorConsole.Properties {
                 return ((int)(this["ScaleZ"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("20")]
+        public int RoundCoefficient {
+            get {
+                return ((int)(this["RoundCoefficient"]));
+            }
+        }
     }
 }

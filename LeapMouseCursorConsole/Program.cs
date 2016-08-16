@@ -21,16 +21,31 @@ namespace LeapMouseCursorConsole
                     .SingleOrDefault())
                 .Where(f => f != null)
                 .Select(f => f.TipPosition)
-                .Do(p => Debug.WriteLine("x: {0}, y: {1}, z: {2}", p.x, p.y, p.z))
-                .Subscribe(p =>
+                //.Do(p => Debug.WriteLine("x: {0}, y: {1}, z: {2}", p.x, p.y, p.z))
+                .Select(p => new
                 {
-                    var x = Settings.Default.Width / 2 + p.x * Settings.Default.ScaleX;
-                    var y = Settings.Default.Height - p.y * Settings.Default.ScaleY;
+                    X = Settings.Default.Width / 2 + p.x * Settings.Default.ScaleX,
+                    Y = Settings.Default.Height - p.y * Settings.Default.ScaleY,
+                    Z = Settings.Default.ScaleZ
+                })
+                //.Do(a => Debug.WriteLine("X: {0}, Y: {1}, Z: {2}", a.X, a.Y, a.Z))
+                .Select(a => new { X = Round(a.X), Y = Round(a.Y), Z = Round(a.Z) })
+                .Do(a => Debug.WriteLine("RoundX: {0}, RoundY: {1}, RoundZ: {2}", a.X, a.Y, a.Z))
+                .DistinctUntilChanged()
+                .Subscribe(a =>
+                {
+                    Debug.WriteLine(DateTime.Now);
 
-                    SetCursorPos((int)x, (int)y);
+                    SetCursorPos(a.X, a.Y);
                 });
 
             Console.ReadKey();
+        }
+
+        static int Round(float floatValue)
+        {
+            var n = Settings.Default.RoundCoefficient;
+            return ((int)floatValue / n) * n;
         }
 
         [DllImport("User32.dll")]
