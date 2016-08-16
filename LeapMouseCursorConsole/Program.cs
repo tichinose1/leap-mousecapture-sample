@@ -23,7 +23,7 @@ namespace LeapMouseCursorConsole
                     .SingleOrDefault())
                 .Where(f => f != null)
                 .Select(f => f.TipPosition);
-            raw.Do(p => Debug.WriteLine("x: {0}, y: {1}, z: {2}", p.x, p.y, p.z));
+            //raw.Subscribe(p => Debug.WriteLine("x: {0}, y: {1}, z: {2}", p.x, p.y, p.z));
 
             // カーソル移動
             raw.Select(p => new
@@ -31,17 +31,28 @@ namespace LeapMouseCursorConsole
                     X = Settings.Default.Width / 2 + p.x * Settings.Default.Scale,
                     Y = Settings.Default.Height - p.y * Settings.Default.Scale,
                 })
-                .Do(a => Debug.WriteLine("X: {0}, Y: {1}", a.X, a.Y))
+                //.Do(a => Debug.WriteLine("X: {0}, Y: {1}", a.X, a.Y))
                 .Select(a => new { X = Round(a.X), Y = Round(a.Y) })
-                .Do(a => Debug.WriteLine("RoundX: {0}, RoundY: {1}", a.X, a.Y))
+                //.Do(a => Debug.WriteLine("RoundX: {0}, RoundY: {1}", a.X, a.Y))
                 .DistinctUntilChanged()
-                .Do(_ => Debug.WriteLine("Set cursor position."))
+                //.Do(_ => Debug.WriteLine("Set cursor position."))
                 .Subscribe(a =>
                 {
                     SetCursorPos(a.X, a.Y);
                 });
 
-            // TODO: クリック
+            // クリック
+            raw
+                .Scan(false, (previous, current) => previous
+                        ? current.z < Settings.Default.RangeOutZ
+                        : current.z < Settings.Default.RangeInZ)
+                //.Do(b => Debug.WriteLine("b: {0}", b))
+                .DistinctUntilChanged()
+                .Where(b => !b)
+                .Subscribe(_ =>
+                {
+                    Debug.WriteLine("clicked.");
+                });
 
             Console.ReadKey();
         }

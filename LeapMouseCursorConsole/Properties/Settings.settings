@@ -17,5 +17,11 @@
     <Setting Name="RoundCoefficient" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">20</Value>
     </Setting>
+    <Setting Name="RangeInZ" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">-20</Value>
+    </Setting>
+    <Setting Name="RangeOutZ" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">20</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

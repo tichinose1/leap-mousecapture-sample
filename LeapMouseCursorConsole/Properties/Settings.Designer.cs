@@ -67,5 +67,23 @@ namespace LeapMouseCursorConsole.Properties {
                 return ((int)(this["RoundCoefficient"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("-20")]
+        public int RangeInZ {
+            get {
+                return ((int)(this["RangeInZ"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("20")]
+        public int RangeOutZ {
+            get {
+                return ((int)(this["RangeOutZ"]));
+            }
+        }
     }
 }
