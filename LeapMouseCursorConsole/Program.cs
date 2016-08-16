@@ -28,8 +28,8 @@ namespace LeapMouseCursorConsole
             // カーソル移動
             raw.Select(p => new
                 {
-                    X = Settings.Default.Width / 2 + p.x * Settings.Default.Scale,
-                    Y = Settings.Default.Height - p.y * Settings.Default.Scale,
+                    X = Settings.Default.ScreenX / 2 + Settings.Default.Scale * p.x,
+                    Y = Settings.Default.ScreenY + Settings.Default.SupplementY - Settings.Default.Scale * p.y,
                 })
                 //.Do(a => Debug.WriteLine("X: {0}, Y: {1}", a.X, a.Y))
                 .Select(a => new { X = Round(a.X), Y = Round(a.Y) })
@@ -43,27 +43,37 @@ namespace LeapMouseCursorConsole
 
             // クリック
             raw
-                .Scan(false, (previous, current) => previous
-                        ? current.z < Settings.Default.RangeOutZ
-                        : current.z < Settings.Default.RangeInZ)
-                //.Do(b => Debug.WriteLine("b: {0}", b))
-                .DistinctUntilChanged()
-                .Where(b => !b)
+                .Scan(new { IsHit = false, Vector = new Vector() }, (previous, current) =>
+                {
+                    return previous.IsHit
+                        ? new { IsHit = current.z < Settings.Default.RangeOutZ, Vector = current }
+                        : new { IsHit = current.z < Settings.Default.RangeInZ, Vector = current };
+                })
+                .Do(a => Debug.WriteLine("a: {0}", a))
+                .DistinctUntilChanged(a => a.IsHit)
+                .Where(a => !a.IsHit)
                 .Subscribe(_ =>
                 {
-                    Debug.WriteLine("clicked.");
+                    mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
+                    mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
                 });
 
             Console.ReadKey();
         }
 
-        static int Round(float floatValue)
+        static int Round(double floatValue)
         {
             var n = Settings.Default.RoundCoefficient;
             return ((int)floatValue / n) * n;
         }
 
+        const int MOUSEEVENTF_LEFTDOWN = 0x2;
+        const int MOUSEEVENTF_LEFTUP = 0x4;
+
+        [DllImport("USER32.dll", CallingConvention = CallingConvention.StdCall)]
+        static extern void mouse_event(int dwFlags, int dx, int dy, int cButtons, int dwExtraInfo);
+
         [DllImport("User32.dll")]
-        private static extern bool SetCursorPos(int X, int Y);
+        static extern bool SetCursorPos(int X, int Y);
     }
 }
