@@ -35,9 +35,9 @@ namespace LeapMouseCursorConsole.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("5")]
-        public int ScaleX {
+        public int Scale {
             get {
-                return ((int)(this["ScaleX"]));
+                return ((int)(this["Scale"]));
             }
         }
         
@@ -56,24 +56,6 @@ namespace LeapMouseCursorConsole.Properties {
         public int Height {
             get {
                 return ((int)(this["Height"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5")]
-        public int ScaleY {
-            get {
-                return ((int)(this["ScaleY"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5")]
-        public int ScaleZ {
-            get {
-                return ((int)(this["ScaleZ"]));
             }
         }
         

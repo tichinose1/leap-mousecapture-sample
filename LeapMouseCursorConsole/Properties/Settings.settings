@@ -5,7 +5,7 @@
     <Setting Name="FPS" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">60</Value>
     </Setting>
-    <Setting Name="ScaleX" Type="System.Int32" Scope="Application">
+    <Setting Name="Scale" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">5</Value>
     </Setting>
     <Setting Name="Width" Type="System.Int32" Scope="Application">
@@ -13,12 +13,6 @@
     </Setting>
     <Setting Name="Height" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">768</Value>
-    </Setting>
-    <Setting Name="ScaleY" Type="System.Int32" Scope="Application">
-      <Value Profile="(Default)">5</Value>
-    </Setting>
-    <Setting Name="ScaleZ" Type="System.Int32" Scope="Application">
-      <Value Profile="(Default)">5</Value>
     </Setting>
     <Setting Name="RoundCoefficient" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">20</Value>
