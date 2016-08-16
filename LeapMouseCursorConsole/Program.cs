@@ -13,6 +13,7 @@ namespace LeapMouseCursorConsole
         static void Main(string[] args)
         {
             var controller = new Controller();
+            controller.SetPolicyFlags(Controller.PolicyFlag.POLICY_BACKGROUND_FRAMES);
 
             Observable.Interval(TimeSpan.FromSeconds(1.0 / Settings.Default.FPS))
                 .Select(_ => controller.Frame().Fingers
