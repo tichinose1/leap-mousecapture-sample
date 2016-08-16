@@ -61,7 +61,7 @@ namespace LeapMouseCursorConsole.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("50")]
+        [global::System.Configuration.DefaultSettingValueAttribute("20")]
         public int RoundCoefficient {
             get {
                 return ((int)(this["RoundCoefficient"]));
@@ -70,7 +70,7 @@ namespace LeapMouseCursorConsole.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("-55")]
+        [global::System.Configuration.DefaultSettingValueAttribute("-45")]
         public int RangeInZ {
             get {
                 return ((int)(this["RangeInZ"]));
@@ -92,6 +92,15 @@ namespace LeapMouseCursorConsole.Properties {
         public int SupplementY {
             get {
                 return ((int)(this["SupplementY"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public double LongClickTime {
+            get {
+                return ((double)(this["LongClickTime"]));
             }
         }
     }

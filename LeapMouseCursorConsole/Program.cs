@@ -4,7 +4,6 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Runtime.InteropServices;
 
 namespace LeapMouseCursorConsole
 {
@@ -20,12 +19,14 @@ namespace LeapMouseCursorConsole
             var raw = Observable.Interval(TimeSpan.FromSeconds(1.0 / Settings.Default.FPS))
                 .Select(_ => controller.Frame().Fingers
                     .Where(f => f.Type == Finger.FingerType.TYPE_INDEX)
-                    .SingleOrDefault())
+                    .FirstOrDefault())
                 .Where(f => f != null)
                 .Select(f => f.TipPosition);
-            //raw.Subscribe(p => Debug.WriteLine("x: {0}, y: {1}, z: {2}", p.x, p.y, p.z));
+
+            raw.Subscribe(p => Debug.WriteLine("x: {0}, y: {1}, z: {2}", p.x, p.y, p.z));
 
             // カーソル移動
+            // 座標変換後、指定の数値の倍数に丸める
             raw.Select(p => new
                 {
                     X = Settings.Default.ScreenX / 2 + Settings.Default.Scale * p.x,
@@ -35,45 +36,52 @@ namespace LeapMouseCursorConsole
                 .Select(a => new { X = Round(a.X), Y = Round(a.Y) })
                 //.Do(a => Debug.WriteLine("RoundX: {0}, RoundY: {1}", a.X, a.Y))
                 .DistinctUntilChanged()
-                //.Do(_ => Debug.WriteLine("Set cursor position."))
                 .Subscribe(a =>
                 {
-                    SetCursorPos(a.X, a.Y);
+                    PInvoke.PerformMoveCursor(a.X, a.Y);
                 });
 
             // クリック
+            // Hit範囲を定義し、In/Outの切り替わるタイミングを監視
+            // Inは厳しく、Outは余裕を持たせて違う値にする
+            // 精度悪し
+            //raw
+            //    .Scan(new { IsHit = false, Vector = new Vector() }, (previous, current) =>
+            //    {
+            //        return previous.IsHit
+            //            ? new { IsHit = current.z < Settings.Default.RangeOutZ, Vector = current }
+            //            : new { IsHit = current.z < Settings.Default.RangeInZ, Vector = current };
+            //    })
+            //    //.Do(a => Debug.WriteLine("a: {0}", a))
+            //    .DistinctUntilChanged(a => a.IsHit)
+            //    .Where(a => !a.IsHit)
+            //    .Subscribe(_ =>
+            //    {
+            //        PInvoke.PerformClick();
+            //    });
+
+            // 長押し
+            // 一定期間内に指先が常に指定範囲内にいるかどうかを監視
+            // クリック後は手前に引く必要あり
             raw
-                .Scan(new { IsHit = false, Vector = new Vector() }, (previous, current) =>
-                {
-                    return previous.IsHit
-                        ? new { IsHit = current.z < Settings.Default.RangeOutZ, Vector = current }
-                        : new { IsHit = current.z < Settings.Default.RangeInZ, Vector = current };
-                })
-                .Do(a => Debug.WriteLine("a: {0}", a))
-                .DistinctUntilChanged(a => a.IsHit)
-                .Where(a => !a.IsHit)
+                .Select(p => p.z < Settings.Default.RangeInZ)
+                //.Do(b => Debug.WriteLine("b: {0}", b))
+                .Buffer(TimeSpan.FromSeconds(Settings.Default.LongClickTime))
+                .Select(bs => bs.All(b => b))
+                .DistinctUntilChanged()
+                .Where(b => b)
                 .Subscribe(_ =>
                 {
-                    mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
-                    mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
+                    PInvoke.PerformClick();
                 });
 
             Console.ReadKey();
         }
 
-        static int Round(double floatValue)
+        static int Round(double originalValue)
         {
             var n = Settings.Default.RoundCoefficient;
-            return ((int)floatValue / n) * n;
+            return ((int)originalValue / n) * n;
         }
-
-        const int MOUSEEVENTF_LEFTDOWN = 0x2;
-        const int MOUSEEVENTF_LEFTUP = 0x4;
-
-        [DllImport("USER32.dll", CallingConvention = CallingConvention.StdCall)]
-        static extern void mouse_event(int dwFlags, int dx, int dy, int cButtons, int dwExtraInfo);
-
-        [DllImport("User32.dll")]
-        static extern bool SetCursorPos(int X, int Y);
     }
 }
