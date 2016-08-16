@@ -12,3 +12,6 @@
 - C# 5.0
 - Leap Motion SDK 2.3.1
 - Ractive Extensions 3.0
+
+# TODO
+- [ ] 指定位置でのカーソル画像の変更（クリックのガイドのため）
