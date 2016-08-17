@@ -43,24 +43,6 @@ namespace LeapMouseCursorConsole.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1366")]
-        public int ScreenX {
-            get {
-                return ((int)(this["ScreenX"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("768")]
-        public int ScreenY {
-            get {
-                return ((int)(this["ScreenY"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1")]
         public int RoundCoefficient {
             get {
@@ -89,18 +71,18 @@ namespace LeapMouseCursorConsole.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("50")]
-        public int SupplementY {
+        public int CorrectionY {
             get {
-                return ((int)(this["SupplementY"]));
+                return ((int)(this["CorrectionY"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public double LongClickTime {
+        public double ClickThreshold {
             get {
-                return ((double)(this["LongClickTime"]));
+                return ((double)(this["ClickThreshold"]));
             }
         }
     }
